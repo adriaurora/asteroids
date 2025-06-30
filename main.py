@@ -12,6 +12,11 @@ def main():
     clock = pygame.time.Clock()  # create a clock to control the frame rate
     dt = 0  # delta time, used to control the speed of the game
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+    updatable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+
+    Player.containers = (updatable, drawable)
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
     print("Starting Asteroids!")
     print(f"Screen width: {SCREEN_WIDTH}"
@@ -20,9 +25,14 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
-        pygame.Surface.fill(screen, (0, 0, 0))
-        player.draw(screen)
-        player.update(dt)
+            
+        updatable.update(dt)
+
+        screen.fill("black")
+
+        for element in drawable:
+            element.draw(screen)
+
         pygame.display.flip()
         dt = clock.tick(60) / 1000.0  # limit to 60 FPS
 
